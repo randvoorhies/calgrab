@@ -1,0 +1,26 @@
+Step 1: Install the Google data python API client by following the instructions here:
+
+  http://code.google.com/p/google-api-python-client/wiki/Installation
+
+  Hints:
+    In Ubuntu, you may need to install python-setuptools: sudo apt-get install python-setuptools
+
+    Also, in my Ubuntu install, the permissions in Google's gdata-2.0.14.zip were all messed up. 
+    Just run chmod a+x -R *.py from within the gdata-2.0.14 directory if this happens to you.
+
+Step 2a: Go to your google calendar page, and click the little gear in the top-right, and choose 'Calendar Settings'
+      b: Click on "Calendars" (between General and Mobile Setup at the top)
+      c: Choose the calendar you want to display, and click the "Shared:Edit Settings" link
+      d: Click the "Calendar Details" link (To the left of "Share this Calendar" at the top)
+      e: In the "Private Address" section, click on the orange XML button
+         You should be presented with some link like:
+         https://www.google.com/calendar/feeds/your.email%40gmail.com/private-somerandomstringgeneratedbygoogle/basic
+      f: Copy down the private-somerandomstringgeneratedbygoogle part for use in the next step
+
+Step 3: Create a ~/.calgrabrc file that looks like this (without the ------es)
+------------------------------------------------------
+username: your.email@gmail.com
+visibility: private-somerandomstringgeneratedbygoogle
+------------------------------------------------------
+
+Step 4: Run ./calgrab! 

@@ -18,7 +18,7 @@ if not os.path.exists(calgrabrc):
   exit(-1)
 
 # A little functional programming magic to parse our settings file
-settings = dict(map(str.strip, line.split(':',1)) for line in open(calgrabrc).read().splitlines())
+settings = dict(map(str.strip, line.split(':',1)) for line in open(calgrabrc).read().strip().splitlines())
 
 username   = settings['username']
 visibility = settings['visibility']
