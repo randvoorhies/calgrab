@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 try:
   from xml.etree import ElementTree
 except ImportError:
@@ -5,12 +6,22 @@ except ImportError:
 import gdata.calendar.data
 import gdata.calendar.client
 import gdata.acl.data
-import atom
-import getopt
-import sys
-import string
 import time
 import datetime
+import os
+import sys
+
+# Make sure the ~/.calgrabrc file exists
+calgrabrc = os.environ['HOME'] + '/.calgrabrc'
+if not os.path.exists(calgrabrc):
+  sys.stderr.write('No ' + calgrabrc + ' settings file found. See the README for details.')
+  exit(-1)
+
+# A little functional programming magic to parse our settings file
+settings = dict(map(str.strip, line.split(':',1)) for line in open(calgrabrc).read().splitlines())
+
+username   = settings['username']
+visibility = settings['visibility']
 
 
 query = gdata.calendar.client.CalendarEventQuery()
@@ -18,8 +29,6 @@ query.start_min = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S.000-07:00'
 query.start_max = (datetime.datetime.now() + datetime.timedelta(days=14)).strftime('%Y-%m-%dT%H:%M:%S.000-07:00')
 
 calendar_client = gdata.calendar.client.CalendarClient()
-username = 'rand.voorhies@gmail.com'
-visibility = open('/Users/rand/bin/calgrab_visibility.txt', 'r').read().strip()
 projection = 'full'
 feed_uri = calendar_client.GetCalendarEventFeedUri(calendar=username, visibility=visibility, projection=projection)
 
@@ -43,12 +52,11 @@ for date in dates:
     eventstr = ''
     curr_day = date.strftime('%A')
     if curr_day != day:
-      print ''
-      eventstr = '{:<10}'.format(curr_day) + '@' 
+      eventstr = '{0:<10}'.format(curr_day) + '@' 
       day = curr_day
     else:
-      eventstr = '{:<10}'.format('') + '@' 
-    eventstr += '{:<6}'.format(date.strftime(' %I:%M%p')) + ' - ' + event.title.text
+      eventstr = '{0:<10}'.format('') + '@' 
+    eventstr += '{0:<6}'.format(date.strftime(' %I:%M%p')) + ' - ' + event.title.text
     print eventstr
 
 
