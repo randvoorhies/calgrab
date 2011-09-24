@@ -51,8 +51,10 @@ for date in dates:
   for event in events[date]:
     eventstr = ''
     curr_day = date.strftime('%A')
+    if date != dates[0]:
+      eventstr = '\n'
     if curr_day != day:
-      eventstr = '{0:<10}'.format(curr_day) + '@' 
+      eventstr += '{0:<10}'.format(curr_day) + '@' 
       day = curr_day
     else:
       eventstr = '{0:<10}'.format('') + '@' 
