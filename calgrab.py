@@ -23,10 +23,9 @@ settings = dict(map(str.strip, line.split(':',1)) for line in open(calgrabrc).re
 username   = settings['username']
 visibility = settings['visibility']
 
-
 query = gdata.calendar.client.CalendarEventQuery()
 query.start_min = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S.000-07:00') 
-query.start_max = (datetime.datetime.now() + datetime.timedelta(days=14)).strftime('%Y-%m-%dT%H:%M:%S.000-07:00')
+query.start_max = (datetime.datetime.now() + datetime.timedelta(days=20)).strftime('%Y-%m-%dT%H:%M:%S.000-07:00')
 
 calendar_client = gdata.calendar.client.CalendarClient()
 projection = 'full'
@@ -38,11 +37,14 @@ feed = calendar_client.GetCalendarEventFeed(q=query, uri=feed_uri)
 for i, an_event in enumerate(feed.entry):
     for a_when in an_event.when:
       time_format='%Y-%m-%dT%H:%M:%S'
-      start_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(a_when.start.split('.')[0], time_format)))
-      end_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(a_when.end.split('.')[0], time_format)))
+      try:
+        start_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(a_when.start.split('.')[0], time_format)))
+        end_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(a_when.end.split('.')[0], time_format)))
 
-      events[start_time] = []
-      events[start_time].append(an_event)
+        events[start_time] = []
+        events[start_time].append(an_event)
+      except:
+        pass
 
 day = ''
 dates = events.keys()
